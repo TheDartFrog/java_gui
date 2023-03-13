@@ -58,9 +58,9 @@ extends Frame {
                  g.fillOval(windowWidth/tableSize*column + 10, windowHeight/tableSize*row + 30, circleSize, circleSize);
             }
         }
-        System.out.println(windowHeight + " " + windowWidth +" "+ circleSize);
+        //System.out.println(windowHeight + " " + windowWidth +" "+ circleSize);
     }
 
-    //MAKE PERMANENT RANDOM COLORS
+
 
 }
