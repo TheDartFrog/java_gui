@@ -33,6 +33,7 @@ public class OnlineStore
             products[productCounter] = product;
             productCounter++;
         }
+        System.out.println("Added " + product.getName() + " to cart.");
 
 
     }
@@ -40,7 +41,7 @@ public class OnlineStore
 
     public void removeProduct(Product product) {
 
-        //TODO
+
         int toRemoveIndex = 0;
 
         for (int i = 0; i<productCounter; i++)
@@ -62,6 +63,8 @@ public class OnlineStore
         }
 
         products[products.length-1] = null;
+
+        System.out.println("Removed " + product.getName() + " from cart.");
 
 
 
