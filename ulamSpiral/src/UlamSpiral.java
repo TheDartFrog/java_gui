@@ -13,8 +13,8 @@ public class UlamSpiral extends Frame {
 
     public UlamSpiral() throws IOException {
 
-        int maxSize = screenSize;
-        spiralSize = (maxSize / CELL_SIZE) * 10 + 1;
+
+        spiralSize = (screenSize / CELL_SIZE) * 10 + 1;
         spiral = new int[spiralSize][spiralSize];
 
 
@@ -43,7 +43,7 @@ public class UlamSpiral extends Frame {
 
 
         }
-        System.out.println("Launching application window..");
+        System.out.println("\nLaunching application window..");
 
         setSize(screenSize, screenSize);
         setVisible(true);
@@ -126,7 +126,7 @@ public class UlamSpiral extends Frame {
     private int fromByteArray(byte[] bytes) {
         int primeFromArray = 0;
         for (int i = 0; i < bytes.length; i++) {
-            primeFromArray = (primeFromArray << 8) | (bytes[i] & 0xff);
+            primeFromArray = (primeFromArray << 8) | (bytes[i] & 255);
         }
         return primeFromArray;
     }
@@ -134,7 +134,7 @@ public class UlamSpiral extends Frame {
     private byte[] toByteArray(int num, int length) {
         byte[] bytes = new byte[length];
         for (int i = length - 1; i >= 0; i--) {
-            bytes[i] = (byte) (num & 0xff);
+            bytes[i] = (byte) (num & 255);
             num >>= 8;
         }
         return bytes;
