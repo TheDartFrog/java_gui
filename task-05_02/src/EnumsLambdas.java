@@ -1,3 +1,4 @@
+
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -18,6 +19,7 @@ public class EnumsLambdas {
         };
 
         Comparator<Person> sexThenSize = /* lambda */;
+
         Arrays.sort(persons, sexThenSize);
         printArray("Persons by sex and then size", persons);
 
@@ -27,5 +29,18 @@ public class EnumsLambdas {
         Country[] countries = Country.values();
         Arrays.sort(countries, /* lambda */);
         printArray("Countries by name", countries);
+    }
+
+    private static void printArray(String message, Object[] array)
+    {
+
+        System.out.println(message);
+
+        for (int h = 0; h <= array.length-1; h++)
+        {
+            System.out.println(array[h]);
+        }
+
+
     }
 }
