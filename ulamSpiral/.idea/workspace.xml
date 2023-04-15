@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="edc0b2bc-f680-4135-9785-cffb653d7905" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../OnlineStore/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../OnlineStore/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UlamSpiral$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/UlamSpiral$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UlamSpiral.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/UlamSpiral.class" afterDir="false" />
-    </list>
+    <list default="true" id="edc0b2bc-f680-4135-9785-cffb653d7905" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
