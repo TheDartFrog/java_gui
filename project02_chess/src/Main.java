@@ -6,7 +6,7 @@ import java.util.*;
 
 
 public class Main extends Frame {
-    //declare textures
+
 
 
     public Button[][] chessboardButtons;
@@ -15,9 +15,13 @@ public class Main extends Frame {
 
     public Button thisButtonOnlyExistsBecauseAWTisBadAndSwingShouldBeUsedInstead;
 
-    public String[][] chessboardPosition = new String[8][8];
+    public Piece[][] chessboardPosition = new Piece[8][8];
 
     public Font chessFont = new Font( "ihateAWT", Font.PLAIN, 16); //AWT only supports logical fonts for labels, as such I cannot use unicode chess symbols
+
+    public Piece selectedPiece = null;
+    public int selectedPositionX = 9;
+    public int selectedPositionY = 9;
 
 
 
@@ -49,6 +53,12 @@ public class Main extends Frame {
                 }
                 add(chessboardButtons[i][j]);
                 chessboardButtons[i][j].setFont(chessFont);
+
+                final int x = i;
+                final int y = j;
+                chessboardButtons[i][j].addActionListener(e -> chessboardClicked(x, y));
+
+
             }
         }
         //////////////////
@@ -96,6 +106,24 @@ public class Main extends Frame {
         //////////
 
     }
+
+    private void chessboardClicked(int x, int y) {
+
+        if (selectedPiece == null)
+        {
+            selectedPiece = chessboardPosition[y][x];
+            selectedPositionX = x;
+            selectedPositionY = y;
+
+
+        } else
+        {
+            chessboardPosition[y][x] = selectedPiece;
+            chessboardPosition[selectedPositionY][selectedPositionX] = null;
+            updateChessboard();
+            selectedPiece = null;
+        }
+    }
     ////////////////////////////
 
     ////////////////////////////
@@ -130,32 +158,234 @@ public class Main extends Frame {
         {
             for (int j = 0; j < 8; j++)
             {
-             chessboardButtons[j][i].setLabel(String.valueOf(chessboardPosition[i][j]));
+                if(chessboardPosition[i][j] != null)
+                {
+                    chessboardButtons[j][i].setLabel(chessboardPosition[i][j].PieceLabel());
 
-             System.out.println(i+"\n"+j);
-             chessboardButtons[i][j].setFont(chessFont);
-
+                    //System.out.println(i + "\n" + j);
+                    chessboardButtons[i][j].setFont(chessFont);
+                } else {chessboardButtons[j][i].setLabel("");}
             }
         }
-        chessboardButtons[7][7].setLabel(chessboardPosition[7][7]);
+
     }
 
     public void initializeBoard()
     {
-
-        chessboardPosition[0] = new String[]{"Black Tower","Black Knight","Black Bishop","Black Queen","Black King","Black Bishop","Black Knight","Black Rook"};
-        chessboardPosition[1] = new String[]{"Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn"};
-        chessboardPosition[2] = new String[]{" "," "," "," "," "," "," "," "};
-        chessboardPosition[3] = new String[]{" "," "," "," "," "," "," "," "};
-        chessboardPosition[4] = new String[]{" "," "," "," "," "," "," "," "};
-        chessboardPosition[5] = new String[]{" "," "," "," "," "," "," "," "};
-        chessboardPosition[6] = new String[]{"White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn"};
-        chessboardPosition[7] = new String[]{"White Tower","White Knight","White Bishop","White Queen","White King","White Bishop","White Knight","White Rook"};
-
-
+        chessboardPosition[0] = new Piece[]{new Rook(Piece.PieceColor.BLACK), new Horsey(Piece.PieceColor.BLACK), new Bishop(Piece.PieceColor.BLACK), new Queen(Piece.PieceColor.BLACK), new King(Piece.PieceColor.BLACK), new Bishop(Piece.PieceColor.BLACK), new Horsey(Piece.PieceColor.BLACK), new Rook(Piece.PieceColor.BLACK)};
+        chessboardPosition[1] = new Piece[]{new Pawn(Piece.PieceColor.BLACK), new Pawn(Piece.PieceColor.BLACK), new Pawn(Piece.PieceColor.BLACK), new Pawn(Piece.PieceColor.BLACK), new Pawn(Piece.PieceColor.BLACK), new Pawn(Piece.PieceColor.BLACK), new Pawn(Piece.PieceColor.BLACK), new Pawn(Piece.PieceColor.BLACK)};
+        chessboardPosition[2] = new Piece[]{null, null, null, null, null, null, null, null};
+        chessboardPosition[3] = new Piece[]{null, null, null, null, null, null, null, null};
+        chessboardPosition[4] = new Piece[]{null, null, null, null, null, null, null, null};
+        chessboardPosition[5] = new Piece[]{null, null, null, null, null, null, null, null};
+        chessboardPosition[6] = new Piece[]{new Pawn(Piece.PieceColor.WHITE), new Pawn(Piece.PieceColor.WHITE), new Pawn(Piece.PieceColor.WHITE), new Pawn(Piece.PieceColor.WHITE), new Pawn(Piece.PieceColor.WHITE), new Pawn(Piece.PieceColor.WHITE), new Pawn(Piece.PieceColor.WHITE), new Pawn(Piece.PieceColor.WHITE)};
+        chessboardPosition[7] = new Piece[]{new Rook(Piece.PieceColor.WHITE), new Horsey(Piece.PieceColor.WHITE), new Bishop(Piece.PieceColor.WHITE), new Queen(Piece.PieceColor.WHITE), new King(Piece.PieceColor.WHITE), new Bishop(Piece.PieceColor.WHITE), new Horsey(Piece.PieceColor.WHITE), new Rook(Piece.PieceColor.WHITE)};
 
         updateChessboard();
+    }
+
+    ////////////////////////////
+}
+
+abstract class Piece
+{
+    public abstract void MoveDirections();
+
+    public enum PieceColor
+    {
+        BLACK("Black"), WHITE("White");
+        private String pieceColorString;
+
+        PieceColor(String color)
+        {
+
+            this.pieceColorString = color;
+
+        }
+
+        @Override
+        public String toString()
+        {
+
+            return pieceColorString;
+
+        }
+    }
+
+    public abstract String PieceLabel();
+
+    public abstract boolean IsCheckable();
+
+
+}
+
+
+//////////////////////////////////////////////////// classes extending Piece for different types of pieces
+class King extends Piece {
+
+    private final PieceColor pieceColor;
+
+
+    public King(PieceColor pieceColor) {
+        this.pieceColor = pieceColor;
+    }
+
+
+
+    @Override
+    public void MoveDirections() {
 
     }
-    ////////////////////////////
+
+    @Override
+    public String PieceLabel() {
+        return this.pieceColor.toString() + " King";
+    }
+
+    @Override
+    public boolean IsCheckable() {
+        return true;
+    }
+}
+
+
+class Queen extends Piece {
+
+    private final PieceColor pieceColor;
+
+
+    public Queen(PieceColor pieceColor) {
+        this.pieceColor = pieceColor;
+    }
+
+
+
+    @Override
+    public void MoveDirections() {
+
+    }
+
+    @Override
+    public String PieceLabel() {
+        return this.pieceColor.toString() + " Queen";
+
+    }
+
+    @Override
+    public boolean IsCheckable() {
+        return false;
+    }
+}
+
+
+class Bishop extends Piece {
+
+    private final PieceColor pieceColor;
+
+
+    public Bishop(PieceColor pieceColor) {
+        this.pieceColor = pieceColor;
+    }
+
+
+
+    @Override
+    public void MoveDirections() {
+
+    }
+
+    @Override
+    public String PieceLabel() {
+        return this.pieceColor.toString() +" Bishop";
+
+    }
+
+    @Override
+    public boolean IsCheckable() {
+        return false;
+    }
+}
+
+class Horsey extends Piece {
+
+    private final PieceColor pieceColor;
+
+
+    public Horsey(PieceColor pieceColor) {
+        this.pieceColor = pieceColor;
+    }
+
+
+
+    @Override
+    public void MoveDirections() {
+
+    }
+
+    @Override
+    public String PieceLabel() {
+        return this.pieceColor.toString() +" Knight";
+
+    }
+
+    @Override
+    public boolean IsCheckable() {
+        return false;
+    }
+}
+
+class Pawn extends Piece {
+
+    private final PieceColor pieceColor;
+
+
+    public Pawn(PieceColor pieceColor) {
+        this.pieceColor = pieceColor;
+    }
+
+
+
+    @Override
+    public void MoveDirections() {
+
+    }
+
+    @Override
+    public String PieceLabel() {
+        return this.pieceColor.toString() +" Pawn";
+
+    }
+
+    @Override
+    public boolean IsCheckable() {
+        return false;
+    }
+}
+
+class Rook extends Piece {
+
+    private final PieceColor pieceColor;
+
+
+    public Rook(PieceColor pieceColor) {
+        this.pieceColor = pieceColor;
+    }
+
+
+
+    @Override
+    public void MoveDirections() {
+
+    }
+
+    @Override
+    public String PieceLabel() {
+        return this.pieceColor.toString() +" Rook";
+
+    }
+
+    @Override
+    public boolean IsCheckable() {
+        return false;
+    }
 }
