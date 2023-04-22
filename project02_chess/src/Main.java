@@ -2,32 +2,40 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
-import javax.imageio.ImageIO;
+
+
 
 public class Main extends Frame {
     //declare textures
-    public Image chessboardImage;
+
 
     public Button[][] chessboardButtons;
+    public Button saveButton;
+    public Button loadButton;
 
-    public char[][] chessboardPosition = new char[8][8];
+    public Button thisButtonOnlyExistsBecauseAWTisBadAndSwingShouldBeUsedInstead;
 
-    public Font chessFont = new Font( "MS Gothic", Font.PLAIN, 24);
+    public String[][] chessboardPosition = new String[8][8];
+
+    public Font chessFont = new Font( "ihateAWT", Font.PLAIN, 16); //AWT only supports logical fonts for labels, as such I cannot use unicode chess symbols
 
 
 
     ////////////////////////////
-    public Main() throws IOException {
+    public Main() throws IOException
+    {
 
         setTitle("Chess!");
         setResizable(false);
 
 
         //Create the chessboardButtons grid
-        chessboardButtons = new Button[9][9];
+        chessboardButtons = new Button[8][8];
         //////////////////////
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
                 chessboardButtons[i][j] = new Button();
 
                 chessboardButtons[i][j].setBounds(i * 128 + 8, j * 128 + 31, 128, 128);
@@ -43,11 +51,44 @@ public class Main extends Frame {
                 chessboardButtons[i][j].setFont(chessFont);
             }
         }
+        //////////////////
+
+        //save and load buttons
+
+        saveButton = new Button("Save");
+        loadButton = new Button("Load");
+
+        saveButton.setBounds(8, 31+128*8, 128, 64);
+        loadButton.setBounds(8+128, 31+128*8, 128, 64);
+
+        saveButton.setBackground(new Color(4, 180, 4));
+        loadButton.setBackground(new Color(44, 64, 220));
+
+        add(saveButton);
+        add(loadButton);
+
+        ///////////
+
+        //fix the layout because the last added button gets messed up
+
+        thisButtonOnlyExistsBecauseAWTisBadAndSwingShouldBeUsedInstead = new Button();
+
+        add(thisButtonOnlyExistsBecauseAWTisBadAndSwingShouldBeUsedInstead);
+
+        thisButtonOnlyExistsBecauseAWTisBadAndSwingShouldBeUsedInstead.addActionListener(event -> {
+            System.out.println("DON'T CLICK ME PLEASEEEEEE");
+        });
+
+
+        ////
+
 
         ////////// make the X button work
-        this.addWindowListener(new WindowAdapter() {
+        this.addWindowListener(new WindowAdapter()
+        {
 
-            public void windowClosing(WindowEvent evt) {
+            public void windowClosing(WindowEvent evt)
+            {
                 System.exit(0);
             }
 
@@ -58,11 +99,12 @@ public class Main extends Frame {
     ////////////////////////////
 
     ////////////////////////////
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException
+    {
         Main frame = new Main();
-        frame.loadImages(); //loading textures
 
-        frame.setSize(1024 + 16, 1024 + 8 + 31); //accounting for window margins
+
+        frame.setSize(1024 + 16, 1024 + 8 + 31 + 64 /*64 pixels for save and load buttons*/ ); //accounting for window margins
         frame.setVisible(true);
 
         frame.initializeBoard();
@@ -71,16 +113,16 @@ public class Main extends Frame {
     ////////////////////////////
 
     ////////////////////////////
+
     @Override
-    public void paint(Graphics g) {
-        g.drawImage(chessboardImage, 8, 31, null); //draw the chessboard
+    public void paint(Graphics g)
+    {
+
     }
     ////////////////////////////
 
     ////////////////////////////
-    public void loadImages() throws IOException {
-        chessboardImage = ImageIO.read(new File("chessboard.png")); //read background/chessboard image
-    }
+
 
     public void updateChessboard()
     {
@@ -95,20 +137,20 @@ public class Main extends Frame {
 
             }
         }
-        chessboardButtons[7][7].setLabel(String.valueOf(chessboardPosition[7][7]));
+        chessboardButtons[7][7].setLabel(chessboardPosition[7][7]);
     }
 
     public void initializeBoard()
     {
 
-        chessboardPosition[0] = new char[]{'♜','♞','♝','♛','♚','♝','♞','♜'};
-        chessboardPosition[1] = new char[]{'♟','♟','♟','♟','♟','♟','♟', '♟'};
-        chessboardPosition[2] = new char[]{' ',' ',' ',' ',' ',' ',' ',' '};
-        chessboardPosition[3] = new char[]{' ','A','M','O','G','U','S',' '};
-        chessboardPosition[4] = new char[]{' ',' ',' ',' ',' ',' ',' ',' '};
-        chessboardPosition[5] = new char[]{' ',' ',' ',' ',' ',' ',' ',' '};
-        chessboardPosition[6] = new char[]{'♙','♙','♙','♙','♙','♙','♙','♙'};
-        chessboardPosition[7] = new char[]{'♖','♘','♗','♕','♔','♗','♘','♖', ' '};
+        chessboardPosition[0] = new String[]{"Black Tower","Black Knight","Black Bishop","Black Queen","Black King","Black Bishop","Black Knight","Black Rook"};
+        chessboardPosition[1] = new String[]{"Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn","Black Pawn"};
+        chessboardPosition[2] = new String[]{" "," "," "," "," "," "," "," "};
+        chessboardPosition[3] = new String[]{" "," "," "," "," "," "," "," "};
+        chessboardPosition[4] = new String[]{" "," "," "," "," "," "," "," "};
+        chessboardPosition[5] = new String[]{" "," "," "," "," "," "," "," "};
+        chessboardPosition[6] = new String[]{"White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn","White Pawn"};
+        chessboardPosition[7] = new String[]{"White Tower","White Knight","White Bishop","White Queen","White King","White Bishop","White Knight","White Rook"};
 
 
 
